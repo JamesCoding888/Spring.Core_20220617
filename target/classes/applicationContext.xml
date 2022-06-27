@@ -6,10 +6,12 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:lang="http://www.springframework.org/schema/lang"
 	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
-		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-4.3.xsd">
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 	
 	<!-- scope="" default: singleton , 每一個物件都一樣 -->
 	<bean id="hello" scope="" class="com.spring.core.session01.beans.Hello" />
@@ -98,5 +100,144 @@
 	<!-- construstor -->
 	<bean id="paper4" p:id="404" autowire="constructor" class="com.spring.core.session02.beans.Paper" />
 	
+	<!-- 引用外部資源 part I -->
+	<!-- 
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="data.properties" />
+	</bean>
+	-->
+	<!-- 引用外部資源 part II -->
+	<context:property-placeholder location="data.properties" />
 	
+	<!-- 建立 Clazz 實例並使用外部資源來注入物件屬性資料 -->
+	<bean id="clazz1"
+		  p:id="1"
+		  p:name="${clazz.name}"
+		  p:credit="${clazz.credit}"	 
+		  class="com.spring.core.session03.beans.Clazz" />
+	
+	<bean id="clazz2"
+		  p:id="2"
+		  p:name="English"
+		  p:credit="2"	 
+		  class="com.spring.core.session03.beans.Clazz"/>
+	
+	<bean id="clazz3"
+		  p:id="3"
+		  p:name="Math"
+		  p:credit="1"	 
+		  class="com.spring.core.session03.beans.Clazz"/>
+	
+	<!-- 學生配置 1 -->
+	<bean id="student1" p:id="1" p:name="John" 
+		  class="com.spring.core.session03.beans.Student">
+		<!-- Set 集合配置 -->  
+		<property name="clazzs">
+			<set>
+				<ref bean="clazz1" />
+				<ref bean="clazz2" />
+				<ref bean="clazz3" />
+			</set>
+		</property>
+	</bean>
+	
+	<!-- 學生配置 2 -->
+	<bean id="student2" p:id="2" p:name="Mary" 
+		  class="com.spring.core.session03.beans.Student">
+		<!-- Set 集合配置 -->  
+		<property name="clazzs">
+			<set>
+				<ref bean="clazz1" />
+				<ref bean="clazz3" />
+			</set>
+		</property>
+	</bean>
+	
+	<!-- 講師配置 1 -->
+	<bean id="teacher1" p:id="101" p:name="Bob"
+		  class="com.spring.core.session03.beans.Teacher">
+		
+		<!-- Set 配置 -->
+		<property name="students">
+			<set>
+				<ref bean="student1" />
+				<ref bean="student2" />
+			</set>
+		</property>
+		
+		<!-- List 配置 -->
+		<property name="subjects">
+			<list>
+				<value>Program</value>
+				<value>English</value>
+			</list>
+		</property>
+		
+		<!--  Map 配置 (每一個元素是一個 entry -> key / value) -->
+		<property name="salary">
+			<map>
+				<entry key="base">
+					<value>50000</value>
+				</entry>
+				<entry key="addition">
+					<value>20000</value>
+				</entry>
+			</map>
+		</property>
+		
+		 
+	</bean>
+	
+	<!-- 簡化 util:set, util:list, util:map 配置 -->
+	
+	<util:set id="students">
+		<ref bean="student1"/>
+		<ref bean="student2"/>
+	</util:set>
+	
+	<util:list id="subjects">
+		<value>Java</value>
+		<value>English</value>
+		<value>Math</value>
+	</util:list>
+	
+	<util:map id="salary">
+		<entry>
+			<key>
+				<value>Base</value>
+			</key>
+			<value>65000</value>
+		</entry>
+		<entry>
+			<key>
+				<value>Addition</value>
+			</key>
+			<value>22000</value>
+		</entry>
+	</util:map>
+	
+	<!-- 講師配置 2 -->
+	<bean id="teacher2" 
+		  p:id="202"
+		  p:name="Jean"
+		  p:students-ref="students"
+		  p:subjects-ref="subjects"
+		  p:salary-ref="salary"
+		  class="com.spring.core.session03.beans.Teacher" />
+	
+	<!-- init-method, destroy-method 配置 -->
+	<bean id="dbconn"
+		  init-method="init"
+		  destroy-method="destroy"
+		  class="com.spring.core.session03.beans.DBConn" />
+	
+	<!-- 利用 BeanFactory 建立實體 -->
+	<bean id="carFactory"
+		  class="com.spring.core.session03.beans.CarFactory"></bean>
+		  
+		  
+	<!-- 掃描配置 -->
+	<context:component-scan base-package="com.spring.core.session03.mvc" />
+	
+		  
 </beans>
