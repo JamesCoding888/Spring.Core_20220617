@@ -1,8 +1,11 @@
 package com.spring.core.session06.template;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -75,7 +78,24 @@ public class EmpDao {
 	
 	
 	// 批次多筆新增 II
-	
+	public int[] batchAdd2(List<Emp> emps) {
+		String sql = "insert into emp(ename, age) values(?, ?)";
+		BatchPreparedStatementSetter setter = new BatchPreparedStatementSetter() {
+
+			@Override
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				// i = emps 的 index
+				ps.setString(1, emps.get(i).getEname());
+				ps.setInt(2, emps.get(i).getAge());
+			}
+
+			@Override
+			public int getBatchSize() {
+				return emps.size();
+			}
+		};
+		return jdbcTemplate.batchUpdate(sql, setter);
+	}
 	
 	
 	
