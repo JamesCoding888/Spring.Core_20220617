@@ -58,15 +58,6 @@ public class TemplateTest2 {
 		int rowcount = empDao.deleteById(14);
 		System.out.println(rowcount);      // rowcount = 0 , 無此筆資料
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 
 	}
 }
