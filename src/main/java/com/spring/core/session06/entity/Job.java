@@ -1,5 +1,6 @@
 package com.spring.core.session06.entity;
 
+//PO (persistent object)
 public class Job {
 	// 欄位
 	private Integer jid;

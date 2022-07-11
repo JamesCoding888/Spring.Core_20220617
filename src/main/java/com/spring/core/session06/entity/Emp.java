@@ -1,6 +1,8 @@
 package com.spring.core.session06.entity;
 import java.util.Date;
 import java.util.List;
+
+// PO (persistent object)
 public class Emp {
 	// 欄位
 	private Integer eid;

@@ -35,7 +35,7 @@ public class SpringJDBCConfig {
 			// Basic
 			ds.setDriverClass(env.getProperty("jdbc.driver")); // beacuse ds.setDriverClass will throw exemption, then we shall use try-catch
 			ds.setJdbcUrl(env.getProperty("jdbc.url"));
-			ds.setUser(null);
+			ds.setUser("jdbc.username");
 			ds.setPassword(env.getProperty("jdbc.password"));
 			// Options
 			ds.setMinPoolSize(10);
