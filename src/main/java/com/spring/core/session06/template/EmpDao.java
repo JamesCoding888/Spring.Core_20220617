@@ -39,7 +39,7 @@ public class EmpDao {
 			emp.setEid(rs.getInt("eid"));
 			emp.setEname(rs.getString("ename"));
 			emp.setAge(rs.getInt("age"));
-			emp.setCreattime(rs.getTimestamp("createtime"));
+			emp.setCreatetime(rs.getTimestamp("createtime"));
 			return emp;
 		};
 		List<Emp> emps = jdbcTemplate.query(sql, rowMapper);
@@ -79,7 +79,7 @@ public class EmpDao {
 	
 	// 批次多筆新增 II
 	public int[] batchAdd2(List<Emp> emps) {
-		String sql = "insert into emp(ename, age) values(?, ?)";
+		String sql = "insert into web_springcore.emp(ename, age) values(?, ?)";
 		BatchPreparedStatementSetter setter = new BatchPreparedStatementSetter() {
 
 			@Override
@@ -98,9 +98,23 @@ public class EmpDao {
 	}
 	
 	
+	// 修改
+	public int updateById(Integer eid, String ename, Integer age) {
+		String sql = "update web_springcore.emp set ename=?, age=? where eid=?";
+		return jdbcTemplate.update(sql, ename, age, eid);
+	}
 	
+	// 刪除
+	public int deleteById(Integer eid) {
+		String sql = "delete from web_springcore.emp where eid=? ";
+		return jdbcTemplate.update(sql, eid);
+	}
 	
-	
+	// 取得單筆資料
+	public Emp getEmpById(Integer id) {
+		String sql = "select eid, ename, age, createtime from web_springcore.emp where eid=? ";
+		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<Emp>(Emp.class), id );
+	}
 	
 	
 	

@@ -8,7 +8,7 @@ public class Emp {
 	private Integer eid;
 	private String ename;
 	private Integer age;
-	private Date creattime;
+	private Date createtime;
 	
 	// 關聯關係
 	private List<Job> jobs; // 一個 emp 對應 0~*個 job
@@ -55,13 +55,13 @@ public class Emp {
 	}
 
 
-	public Date getCreattime() {
-		return creattime;
+	public Date getCreatetime() {
+		return createtime;
 	}
 
 
-	public void setCreattime(Date creattime) {
-		this.creattime = creattime;
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
 	}
 
 
@@ -77,7 +77,7 @@ public class Emp {
 
 	@Override
 	public String toString() {
-		return "Emp [eid=" + eid + ", ename=" + ename + ", age=" + age + ", creattime=" + creattime + ", jobs=" + jobs
+		return "Emp [eid=" + eid + ", ename=" + ename + ", age=" + age + ", createtime=" + createtime + ", jobs=" + jobs
 				+ "]";
 	}
 	

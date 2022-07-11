@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import com.spring.core.session06.entity.Emp;
 import com.spring.core.session06.template.EmpDao;
 
@@ -37,16 +36,27 @@ public class TemplateTest2 {
 		 */
 		
 		// 測試批次新增 II
+		/*
 		List<Emp> emps = new ArrayList<>();
 		emps.add(new Emp("Rose", 25));
 		emps.add(new Emp("Jack", 18));
 		int[] rowcounts = empDao.batchAdd2(emps);
 		System.out.println(Arrays.toString(rowcounts));
+		*/
 		
+	
+		// 單筆查詢
+		// System.out.println(empDao.getEmpById(1));
 		
+		// 修改
+		/*
+		int rowcount = empDao.updateById(1, "A01", 28);
+		System.out.println(rowcount);
+		*/
 		
-		
-		
+		// 刪除
+		int rowcount = empDao.deleteById(14);
+		System.out.println(rowcount);      // rowcount = 0 , 無此筆資料
 		
 		
 		
