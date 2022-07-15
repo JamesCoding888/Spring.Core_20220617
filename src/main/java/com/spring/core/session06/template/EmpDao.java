@@ -13,7 +13,13 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.spring.core.session06.entity.Emp;
 import com.spring.core.session06.entity.Job;
  
@@ -26,6 +32,10 @@ public class EmpDao {
 	
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	
+	@Autowired
+	private ComboPooledDataSource dataSource;
+	
 	
 	// 多筆查詢 I
 	public List<Map<String, Object>> queryAll() {
@@ -146,6 +156,63 @@ public class EmpDao {
 			return jdbcTemplate.query(sql, resultSetExtractor);
 		}
 	
+		// 同時新增二筆 Emp 資料
+		public int[] addTwoTx(String ename1, Integer age1, String ename2, Integer age2) {
+			int[] rowcount = new int[2];
+			
+			// 建立 TransactionManager
+			DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
+			
+			// 定義 TransactionDefinition
+			DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+			def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+			
+			// 交易狀態(交易封裝)
+			TransactionStatus status = transactionManager.getTransaction(def);
+			try {
+				String sql = "insert into emp(ename, age) values(?, ?)";
+				rowcount[0] = jdbcTemplate.update(sql, ename1, age1);
+				rowcount[1] = jdbcTemplate.update(sql, ename2, age2);				
+			} catch (Exception e) {
+				transactionManager.rollback(status);
+				System.out.println("新增失敗");
+				return null;
+			}
+			transactionManager.commit(status);			
+			System.out.println("新增成功");
+			return rowcount;			
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	
 	
 }
