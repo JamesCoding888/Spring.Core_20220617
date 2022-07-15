@@ -89,6 +89,25 @@ from job j
 where j.eid is null;
 
 
+-- 20220715 select script 
+
+select e.eid, e.ename, e.age, e.createtime, 
+	   j.jid, j.jname, j.eid from emp e left join job j on j.eid = e.eid;
+
+
+select j.jid, j.jname, j.eid from job j;
+
+select e.eid, e.ename, e.age, e.createtime, 
+	   j.jid as job_jid, j.jname as job_jname, j.eid as job_eid from emp e left join job j on j.eid = e.eid;
+       
+       
+select j.jid, j.jname, j.eid, e.eid, e.ename, e.age, e.createtime from job j left join emp e on e.eid = j.eid;
+
+
+select j.jid, j.jname, j.eid, e.eid as emp_eid, e.ename as emp_ename, e.age as emp_age, e.createtime as emp_createtime 
+	from job j left join emp e on e.eid = j.eid;
+
+	
 
 
 

@@ -1,19 +1,22 @@
 package com.spring.core.session06.template;
-import java.sql.PreparedStatement;
+import java.sql.PreparedStatement; 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import org.simpleflatmapper.jdbc.spring.JdbcTemplateMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import com.spring.core.session06.entity.Emp;
-
+import com.spring.core.session06.entity.Job;
+ 
 // Dao: Data Access Object
 @Repository
 public class EmpDao {
@@ -116,7 +119,32 @@ public class EmpDao {
 		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<Emp>(Emp.class), id );
 	}
 	
-	
+	// Emp一對多Job 查詢
+		public List<Emp> queryEmpAndJob() {
+			String sql = "select e.eid, e.ename, e.age, e.createtime, " +
+					     "j.jid as job_jid, j.jname as job_jname, j.eid as job_eid " +
+					     "from emp e left join job j on j.eid = e.eid";
+			// j.jid as job_jid 這樣的命名 "job_jid" 表示將 jid 的內容對應 job
+			
+			ResultSetExtractor<List<Emp>> resultSetExtractor = JdbcTemplateMapperFactory.newInstance()
+					.addKeys("eid")
+					.newResultSetExtractor(Emp.class);
+			
+			return jdbcTemplate.query(sql, resultSetExtractor);
+		}
+		
+		// Job多對一Emp 查詢
+		public List<Job> queryJobAndEmp() {
+			String sql = "select j.jid, j.jname, j.eid, " +
+						 "e.eid as emp_eid, e.ename as emp_ename, e.age as emp_age, e.createtime as emp_createtime " +
+						 "from job j left join emp e on e.eid = j.eid";
+			
+			ResultSetExtractor<List<Job>> resultSetExtractor = JdbcTemplateMapperFactory.newInstance()
+					.addKeys("jid")
+					.newResultSetExtractor(Job.class);
+			
+			return jdbcTemplate.query(sql, resultSetExtractor);
+		}
 	
 	
 	
