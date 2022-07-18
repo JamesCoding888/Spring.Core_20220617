@@ -110,7 +110,7 @@ select j.jid, j.jname, j.eid, e.eid as emp_eid, e.ename as emp_ename, e.age as e
 	
 -- book (書籤資料), stock (庫存資料), wallet (客戶雲端錢包)
 -- 建立 book (書籤資料）表
-create table if not exists book(
+create table if not exists web_springcore.book(
 	bid integer not null auto_increment,
 	bname varchar(20) not null,
 	price integer default 0,
@@ -119,26 +119,21 @@ create table if not exists book(
 );
 
 -- 建立 stock(庫存資料) 表
-create table if not exists stock(
+create table if not exists web_springcore.stock(
 	sid integer not null auto_increment,
 	bid integer not null, -- book 的 bid
 	amount integer default 0,
 	primary key (sid),
-	foreign key(bid) references book(bid), -- 外鍵關聯
+	foreign key(bid) references book(bid) -- 外鍵關聯
 );
 
 -- 建立 wallet (客戶雲端錢包) 表
-create table if not exists wallet(
+create table if not exists web_springcore.wallet(
 	wid integer not null auto_increment,
 	wname varchar(20) not null,
 	money integer default 0,
 	primary key (wid)
+
 );
-
-
-
-
-
-
 
 
